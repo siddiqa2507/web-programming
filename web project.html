@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub | 10-in-1 Arcade</title>
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #ffffff;
+            --text-dim: #b0b0b0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+        }
+
+        nav {
+            width: 250px;
+            background: #000;
+            height: 100vh;
+            position: fixed;
+            padding: 20px;
+            border-right: 1px solid #333;
+        }
+
+        nav h1 { color: var(--primary); font-size: 28px; margin-bottom: 30px; }
+        nav ul { list-style: none; padding: 0; }
+        nav ul li { padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        nav ul li:hover { background: #222; color: var(--primary); }
+        
+        main {
+            margin-left: 290px;
+            padding: 40px;
+            width: 100%;
+        }
+
+        .header-banner {
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, border 0.3s;
+            border: 1px solid #333;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .thumb {
+            height: 140px;
+            background: #252525;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
+
+        .info h3 { margin: 15px 0 5px; }
+        .info p { color: var(--text-dim); font-size: 14px; margin-bottom: 15px; }
+
+        .play-btn {
+            background: var(--primary);
+            color: #000;
+            text-decoration: none;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .play-btn:hover { background: #fff; }
+
+        @media (max-width: 800px) {
+            nav { display: none; }
+            main { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h1>GameHub</h1>
+        <ul>
+            <li>🏠 Home</li>
+            <li>🚀 Action</li>
+            <li>🧩 Puzzle</li>
+            <li>🃏 Cards</li>
+            <li>⚙️ Settings</li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="header-banner">
+            <h2>Welcome to the 10-in-1 Portal</h2>
+            <p>No downloads. Just click and play instantly.</p>
+        </div>
+
+        <div class="grid">
+            <div class="game-card">
+                <div class="thumb">🐍</div>
+                <div class="info">
+                    <h3>Classic Snake</h3>
+                    <p>Google Arcade</p>
+                    <a href="https://www.google.com/search?q=play+snake" target="_blank" class="play-btn">PLAY</a>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="thumb">👻</div>
+                <div class="info">
+                    <h3>Pac-Man</h3>
+                    <p>Retro Classic</p>
+                    <a href="https://www.google.com/search?q=play+pacman" target="_blank" class="play-btn">PLAY</a>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="thumb">💣</div>
+                <div class="info">
+                    <h3>Minesweeper</h3>
+                    <p>Strategy Puzzle</p>
+                    <a href="https://www.google.com/search?q=play+minesweeper" target="_blank" class="play-btn">PLAY</a>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="thumb">❌</div>
+                <div class="info">
+                    <h3>Tic Tac Toe</h3>
+                    <p>2 Player Fun</p>
+                    <a href="https://www.google.com/search?q=play+tic+tac+toe" target="_blank" class="play-btn">PLAY</a>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="thumb">🃏</div>
+                <div class="info">
+                    <h3>Solitaire</h3>
+                    <p>Classic Cards</p>
+                    <a href="https://www.google.com/search?q=play+solitaire" target="_blank" class="play-btn">PLAY</a>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="thumb">🔢</div>
+                <div class="info">
+                    <h3>2048</h3>
+                    <p>Number Logic</p>
+                    <a href="https://play2048.co/" target="_blank" class="play-btn">PLAY</a>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="thumb">🦖</div>
+                <div class="info">
+                    <h3>Dino Run</h3>
+                    <p>Offline Runner</p>
+                    <a href="https://elgoog.im/t-rex/" target="_blank" class="play-btn">PLAY</a>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="thumb">🧱</div>
+                <div class="info">
+                    <h3>Atari Breakout</h3>
+                    <p>Brick Smasher</p>
+                    <a href="https://elgoog.im/breakout/" target="_blank" class="play-btn">PLAY</a>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="thumb">🐥</div>
+                <div class="info">
+                    <h3>Flappy Bird</h3>
+                    <p>Skill/Reflex</p>
+                    <a href="https://flappybird.io/" target="_blank" class="play-btn">PLAY</a>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="thumb">🛸</div>
+                <div class="info">
+                    <h3>Space Invaders</h3>
+                    <p>Space Shooter</p>
+                    <a href="https://freeinvaders.org/" target="_blank" class="play-btn">PLAY</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
