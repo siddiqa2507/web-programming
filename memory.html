@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Memory Card Game</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 20px;
+  color: cyan;
+}
+
+.info {
+  margin: 10px;
+  font-size: 18px;
+}
+
+button {
+  padding: 10px 15px;
+  margin: 10px;
+  background: cyan;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.card {
+  width: 100px;
+  height: 100px;
+  background: #222;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.card.flip {
+  transform: rotateY(180deg);
+}
+
+.front, .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  backface-visibility: hidden;
+}
+
+.front {
+  background: #333;
+}
+
+.back {
+  background: cyan;
+  color: black;
+  transform: rotateY(180deg);
+}
+</style>
+</head>
+
+<body>
+
+<h1>🧠 Memory Card Game</h1>
+
+<div class="info">
+  ⏱ Time: <span id="time">0</span> sec |
+  🎯 Moves: <span id="moves">0</span>
+</div>
+
+<button onclick="startGame()">🔄 Restart</button>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const emojis = ["🍎","🍌","🍇","🍉","🍒","🍍","🥝","🍓"];
+let cards = [];
+let flippedCards = [];
+let moves = 0;
+let time = 0;
+let timer;
+
+function startGame() {
+  const gameGrid = document.getElementById("grid");
+  gameGrid.innerHTML = "";
+  
+  cards = [...emojis, ...emojis];
+  cards.sort(() => 0.5 - Math.random());
+
+  flippedCards = [];
+  moves = 0;
+  time = 0;
+
+  document.getElementById("moves").textContent = moves;
+  document.getElementById("time").textContent = time;
+
+  clearInterval(timer);
+  timer = setInterval(() => {
+    time++;
+    document.getElementById("time").textContent = time;
+  }, 1000);
+
+  cards.forEach((emoji, index) => {
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.dataset.emoji = emoji;
+
+    card.innerHTML = `
+      <div class="front">❓</div>
+      <div class="back">${emoji}</div>
+    `;
+
+    card.addEventListener("click", () => flipCard(card));
+    gameGrid.appendChild(card);
+  });
+}
+
+function flipCard(card) {
+  if (card.classList.contains("flip") || flippedCards.length === 2) return;
+
+  card.classList.add("flip");
+  flippedCards.push(card);
+
+  if (flippedCards.length === 2) {
+    moves++;
+    document.getElementById("moves").textContent = moves;
+
+    if (flippedCards[0].dataset.emoji === flippedCards[1].dataset.emoji) {
+      flippedCards = [];
+
+      // Check win
+      if (document.querySelectorAll(".flip").length === cards.length) {
+        clearInterval(timer);
+        setTimeout(() => alert("🎉 You Won! Time: " + time + " sec, Moves: " + moves), 300);
+      }
+
+    } else {
+      setTimeout(() => {
+        flippedCards.forEach(c => c.classList.remove("flip"));
+        flippedCards = [];
+      }, 800);
+    }
+  }
+}
+
+// Start game on load
+startGame();
+</script>
+
+</body>
+</html>

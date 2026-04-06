@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guess The Number</title>
+
+<style>
+  body {
+    background: linear-gradient(135deg, #1e1e2f, #121212);
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+    padding-top: 50px;
+  }
+
+  .container {
+    background: #222;
+    padding: 30px;
+    border-radius: 15px;
+    width: 300px;
+    margin: auto;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  }
+
+  h1 {
+    margin-bottom: 10px;
+  }
+
+  input {
+    padding: 10px;
+    width: 80%;
+    border-radius: 8px;
+    border: none;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  button {
+    padding: 10px 20px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #00adb5;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background: #019ca3;
+  }
+
+  #message {
+    margin-top: 15px;
+    font-weight: bold;
+  }
+
+  .stats {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #ccc;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+  <h1>🎯 Guess The Number</h1>
+  <p>Guess a number between <b>1 and 100</b></p>
+
+  <input type="number" id="guessInput" placeholder="Enter your guess">
+  <br>
+  <button onclick="checkGuess()">Guess</button>
+  <button onclick="restartGame()">Restart</button>
+
+  <p id="message"></p>
+
+  <div class="stats">
+    Attempts: <span id="attempts">0</span><br>
+    Best Score: <span id="bestScore">--</span>
+  </div>
+</div>
+
+<script>
+  let number = Math.floor(Math.random() * 100) + 1;
+  let attempts = 0;
+  let bestScore = localStorage.getItem("bestScore");
+
+  if(bestScore){
+    document.getElementById("bestScore").innerText = bestScore;
+  }
+
+  function checkGuess() {
+    let guess = Number(document.getElementById("guessInput").value);
+    let message = document.getElementById("message");
+
+    if (!guess || guess < 1 || guess > 100) {
+      message.innerText = "⚠️ Enter a valid number (1-100)";
+      return;
+    }
+
+    attempts++;
+    document.getElementById("attempts").innerText = attempts;
+
+    if (guess === number) {
+      message.innerText = "🎉 Correct! You guessed it!";
+
+      if (!bestScore || attempts < bestScore) {
+        localStorage.setItem("bestScore", attempts);
+        document.getElementById("bestScore").innerText = attempts;
+      }
+
+    } else if (guess < number) {
+      message.innerText = "📉 Too low!";
+    } else {
+      message.innerText = "📈 Too high!";
+    }
+  }
+
+  function restartGame() {
+    number = Math.floor(Math.random() * 100) + 1;
+    attempts = 0;
+    document.getElementById("attempts").innerText = 0;
+    document.getElementById("message").innerText = "";
+    document.getElementById("guessInput").value = "";
+  }
+</script>
+
+</body>
+</html>

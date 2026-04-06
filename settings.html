@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Settings</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      transition: 0.3s;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px cyan;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      text-align: left;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      background: cyan;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #00bcd4;
+    }
+
+    .light-mode {
+      background: #f5f5f5;
+      color: black;
+    }
+
+    .light-mode .container {
+      background: white;
+      box-shadow: 0 0 10px gray;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>⚙ Game Settings</h1>
+
+  <label>Player Name</label>
+  <input type="text" id="playerName" placeholder="Enter your name">
+
+  <label>Theme</label>
+  <select id="theme">
+    <option value="dark">Dark</option>
+    <option value="light">Light</option>
+  </select>
+
+  <button onclick="saveSettings()">💾 Save Settings</button>
+  <button onclick="resetSettings()">🔄 Reset</button>
+  <button onclick="goBack()">⬅️ Back to Home</button>
+</div>
+
+<script>
+  function saveSettings() {
+    const settings = {
+      name: document.getElementById("playerName").value,
+      theme: document.getElementById("theme").value
+    };
+
+    localStorage.setItem("gameSettings", JSON.stringify(settings));
+    applyTheme(settings.theme);
+    alert("Settings Saved!");
+  }
+
+  function resetSettings() {
+    localStorage.removeItem("gameSettings");
+    document.getElementById("playerName").value = "";
+    document.getElementById("theme").value = "dark";
+    applyTheme("dark");
+    alert("Settings Reset!");
+  }
+
+  function applyTheme(theme) {
+    if (theme === "light") {
+      document.body.classList.add("light-mode");
+    } else {
+      document.body.classList.remove("light-mode");
+    }
+  }
+
+  function goBack() {
+    window.location.href = "web project.html"; // change if your file name is different
+  }
+
+  // Auto apply saved settings (no button needed)
+  window.onload = function () {
+    const settings = JSON.parse(localStorage.getItem("gameSettings"));
+    if (!settings) return;
+
+    document.getElementById("playerName").value = settings.name || "";
+    document.getElementById("theme").value = settings.theme || "dark";
+    applyTheme(settings.theme || "dark");
+  };
+</script>
+
+</body>
+</html>

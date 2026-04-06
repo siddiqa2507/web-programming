@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guess The Spy</title>
+
+<style>
+  body {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .container {
+    background: rgba(0,0,0,0.7);
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 400px;
+    margin: auto;
+  }
+
+  input, button {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+  }
+
+  button {
+    background: #ff4b5c;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #e63946;
+  }
+
+  #roleBox {
+    margin-top: 20px;
+    padding: 20px;
+    background: #111;
+    border-radius: 10px;
+    display: none;
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+  <h1>🕵️ Guess The Spy</h1>
+
+  <p>Enter number of players:</p>
+  <input type="number" id="players" min="3" max="10">
+
+  <br>
+  <button onclick="startGame()">Start Game</button>
+
+  <div id="roleBox">
+    <h2 id="playerTurn"></h2>
+    <button onclick="showRole()">Reveal Role</button>
+    <p id="roleText" class="hidden"></p>
+    <button onclick="nextPlayer()">Next Player</button>
+  </div>
+
+  <div id="voteSection" class="hidden">
+    <h2>Who is the Spy?</h2>
+    <input type="number" id="vote" placeholder="Enter player number">
+    <button onclick="checkSpy()">Submit</button>
+    <p id="result"></p>
+  </div>
+</div>
+
+<script>
+let words = ["Beach", "School", "Hospital", "Airport", "Hotel"];
+let players = 0;
+let currentPlayer = 1;
+let spyIndex;
+let secretWord;
+
+function startGame() {
+  players = Number(document.getElementById("players").value);
+
+  if (players < 3) {
+    alert("Minimum 3 players required!");
+    return;
+  }
+
+  spyIndex = Math.floor(Math.random() * players) + 1;
+  secretWord = words[Math.floor(Math.random() * words.length)];
+
+  currentPlayer = 1;
+  document.getElementById("roleBox").style.display = "block";
+  updateTurn();
+}
+
+function updateTurn() {
+  document.getElementById("playerTurn").innerText =
+    "Player " + currentPlayer + "'s turn";
+  document.getElementById("roleText").classList.add("hidden");
+}
+
+function showRole() {
+  let roleText = document.getElementById("roleText");
+  roleText.classList.remove("hidden");
+
+  if (currentPlayer === spyIndex) {
+    roleText.innerText = "🤫 You are the SPY!";
+  } else {
+    roleText.innerText = "📝 Word: " + secretWord;
+  }
+}
+
+function nextPlayer() {
+  currentPlayer++;
+
+  if (currentPlayer > players) {
+    document.getElementById("roleBox").style.display = "none";
+    document.getElementById("voteSection").classList.remove("hidden");
+    return;
+  }
+
+  updateTurn();
+}
+
+function checkSpy() {
+  let guess = Number(document.getElementById("vote").value);
+  let result = document.getElementById("result");
+
+  if (guess === spyIndex) {
+    result.innerText = "🎉 Correct! Player " + spyIndex + " was the Spy!";
+  } else {
+    result.innerText = "❌ Wrong! The Spy was Player " + spyIndex;
+  }
+}
+</script>
+
+</body>
+</html>

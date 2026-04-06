@@ -1,217 +1,872 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameHub | 10-in-1 Arcade</title>
-    <style>
-        :root {
-            --primary: #00d2ff;
-            --dark-bg: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #ffffff;
-            --text-dim: #b0b0b0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameHub Pro | Arcade Portal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-main);
-            margin: 0;
-            display: flex;
-        }
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent-dark: #0ea5e9;
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --border: #334155;
+      --success: #22c55e;
+      --shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+    }
 
-        nav {
-            width: 250px;
-            background: #000;
-            height: 100vh;
-            position: fixed;
-            padding: 20px;
-            border-right: 1px solid #333;
-        }
+    body {
+      background: linear-gradient(135deg, #020617, #0f172a, #1e293b);
+      color: var(--text);
+      min-height: 100vh;
+      transition: 0.3s;
+    }
 
-        nav h1 { color: var(--primary); font-size: 28px; margin-bottom: 30px; }
-        nav ul { list-style: none; padding: 0; }
-        nav ul li { padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        nav ul li:hover { background: #222; color: var(--primary); }
-        
-        main {
-            margin-left: 290px;
-            padding: 40px;
-            width: 100%;
-        }
+    body.light-mode {
+      --bg: #eef6ff;
+      --panel: #ffffff;
+      --card: #f8fbff;
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      background: linear-gradient(135deg, #eff6ff, #dbeafe, #e0f2fe);
+    }
 
-        .header-banner {
-            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
-            padding: 40px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
+    .container {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 25px;
-        }
+    .sidebar {
+      background: rgba(2, 6, 23, 0.95);
+      border-right: 1px solid var(--border);
+      padding: 25px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
 
-        .game-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s, border 0.3s;
-            border: 1px solid #333;
-            text-align: center;
-            padding-bottom: 15px;
-        }
+    body.light-mode .sidebar {
+      background: rgba(255, 255, 255, 0.92);
+    }
 
-        .game-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-        }
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
 
-        .thumb {
-            height: 140px;
-            background: #252525;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 50px;
-        }
+    .tagline {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
 
-        .info h3 { margin: 15px 0 5px; }
-        .info p { color: var(--text-dim); font-size: 14px; margin-bottom: 15px; }
+    .menu-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin: 20px 0 10px;
+      letter-spacing: 1px;
+    }
 
-        .play-btn {
-            background: var(--primary);
-            color: #000;
-            text-decoration: none;
-            padding: 10px 30px;
-            border-radius: 25px;
-            font-weight: bold;
-            display: inline-block;
-            transition: 0.3s;
-        }
+    .nav-link {
+      display: block;
+      text-decoration: none;
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: 0.3s;
+    }
 
-        .play-btn:hover { background: #fff; }
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: var(--accent);
+    }
 
-        @media (max-width: 800px) {
-            nav { display: none; }
-            main { margin-left: 0; }
-        }
-    </style>
+    .sidebar-box {
+      margin-top: 25px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px;
+    }
+
+    body.light-mode .sidebar-box {
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    .sidebar-box h4 {
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .sidebar-box p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .setting-list {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .main {
+      padding: 28px;
+    }
+
+    .hero {
+      background: linear-gradient(120deg, rgba(14, 165, 233, 0.95), rgba(37, 99, 235, 0.92));
+      padding: 32px;
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 34px;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      color: #e0f2fe;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: white;
+      color: #0f172a;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: white;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .control-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    body.light-mode .control-box {
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .control-box label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .control-box input,
+    .control-box select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: white;
+      outline: none;
+    }
+
+    body.light-mode .control-box input,
+    body.light-mode .control-box select {
+      background: white;
+      color: #0f172a;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    body.light-mode .stat-card {
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .stat-card h3 {
+      font-size: 28px;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .stat-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section-title h2 {
+      font-size: 25px;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .game-card {
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: 0.3s;
+      box-shadow: var(--shadow);
+    }
+
+    body.light-mode .game-card {
+      background: rgba(255, 255, 255, 0.94);
+    }
+
+    .game-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+    }
+
+    .game-top {
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border-bottom: 1px solid var(--border);
+    }
+
+    body.light-mode .game-top {
+      background: linear-gradient(145deg, #dbeafe, #eff6ff);
+    }
+
+    .game-body {
+      padding: 18px;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .badge.category {
+      background: rgba(56, 189, 248, 0.15);
+      color: #7dd3fc;
+    }
+
+    .badge.rating {
+      background: rgba(34, 197, 94, 0.15);
+      color: #86efac;
+    }
+
+    .game-body h3 {
+      font-size: 21px;
+      margin-bottom: 8px;
+    }
+
+    .game-body p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 66px;
+      margin-bottom: 16px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .play-btn,
+    .info-btn {
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .play-btn {
+      background: var(--accent);
+      color: #082f49;
+    }
+
+    .play-btn:hover {
+      background: var(--accent-dark);
+      color: white;
+    }
+
+    .info-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .info-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 14px;
+      padding: 20px 10px 10px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 2000;
+    }
+
+    .modal-box {
+      width: min(650px, 95%);
+      background: linear-gradient(145deg, #111827, #0f172a);
+      border: 1px solid var(--accent);
+      border-radius: 24px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      background: rgba(56, 189, 248, 0.12);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h2 {
+      font-size: 28px;
+      color: var(--accent);
+    }
+
+    .close-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: white;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .modal-content {
+      padding: 26px 24px 30px;
+    }
+
+    .modal-icon {
+      font-size: 72px;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .modal-content p {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.8;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-tags {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .modal-tag {
+      background: rgba(56, 189, 248, 0.14);
+      color: #7dd3fc;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #0f172a;
+      color: white;
+      padding: 14px 18px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      z-index: 1000;
+    }
+
+    @media (max-width: 1100px) {
+      .controls,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 850px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">🎮 GameHub Pro</div>
+      <div class="tagline">A useful and interactive arcade portal with search, filter, ratings, and saved settings support.</div>
 
-    <nav>
-        <h1>GameHub</h1>
-        <ul>
-            <li>🏠 Home</li>
-            <li>🚀 Action</li>
-            <li>🧩 Puzzle</li>
-            <li>🃏 Cards</li>
-            <li>⚙️ Settings</li>
-        </ul>
-    </nav>
+      <div class="menu-title">Navigation</div>
+      <a href="#home" class="nav-link active">🏠 Home</a>
+      <a href="#games" class="nav-link">🕹️ Games</a>
+      <a href="settings.html" class="nav-link">⚙️ Settings</a>
 
-    <main>
-        <div class="header-banner">
-            <h2>Welcome to the 10-in-1 Portal</h2>
-            <p>No downloads. Just click and play instantly.</p>
+      <div class="sidebar-box">
+        <h4>Saved Settings</h4>
+        <p id="playerGreeting">Player: Guest</p>
+        <div class="setting-list">
+          <div id="themeStatus">Theme: Dark</div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main" id="home">
+      <section class="hero">
+        <h1 id="heroTitle">Welcome to the 10-in-1 Arcade Portal</h1>
+        <p>
+          Play classic mini-games in one place. This version also reads your saved settings from the Settings page and applies your player name and theme to the homepage.
+        </p>
+        <div class="hero-buttons">
+          <a href="#games" class="btn btn-primary">Explore Games</a>
+          <button class="btn btn-secondary" onclick="showFeaturedGame()">Random Game Suggestion</button>
+        </div>
+      </section>
+
+      <section class="stats">
+        <div class="stat-card">
+          <h3 id="totalGames">10</h3>
+          <p>Total Games</p>
+        </div>
+        <div class="stat-card">
+          <h3>4</h3>
+          <p>Game Categories</p>
+        </div>
+        <div class="stat-card">
+          <h3>24/7</h3>
+          <p>Accessible Anytime</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="visibleCount">10</h3>
+          <p>Currently Visible</p>
+        </div>
+      </section>
+
+      <section class="controls">
+        <div class="control-box">
+          <label for="searchInput">Search a game</label>
+          <input type="text" id="searchInput" placeholder="Type game name here..." onkeyup="filterGames()" />
         </div>
 
-        <div class="grid">
-            <div class="game-card">
-                <div class="thumb">🐍</div>
-                <div class="info">
-                    <h3>Classic Snake</h3>
-                    <p>Google Arcade</p>
-                    <a href="https://www.google.com/search?q=play+snake" target="_blank" class="play-btn">PLAY</a>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="thumb">👻</div>
-                <div class="info">
-                    <h3>Pac-Man</h3>
-                    <p>Retro Classic</p>
-                    <a href="https://www.google.com/search?q=play+pacman" target="_blank" class="play-btn">PLAY</a>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="thumb">💣</div>
-                <div class="info">
-                    <h3>Minesweeper</h3>
-                    <p>Strategy Puzzle</p>
-                    <a href="https://www.google.com/search?q=play+minesweeper" target="_blank" class="play-btn">PLAY</a>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="thumb">❌</div>
-                <div class="info">
-                    <h3>Tic Tac Toe</h3>
-                    <p>2 Player Fun</p>
-                    <a href="https://www.google.com/search?q=play+tic+tac+toe" target="_blank" class="play-btn">PLAY</a>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="thumb">🃏</div>
-                <div class="info">
-                    <h3>Solitaire</h3>
-                    <p>Classic Cards</p>
-                    <a href="https://www.google.com/search?q=play+solitaire" target="_blank" class="play-btn">PLAY</a>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="thumb">🔢</div>
-                <div class="info">
-                    <h3>2048</h3>
-                    <p>Number Logic</p>
-                    <a href="https://play2048.co/" target="_blank" class="play-btn">PLAY</a>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="thumb">🦖</div>
-                <div class="info">
-                    <h3>Dino Run</h3>
-                    <p>Offline Runner</p>
-                    <a href="https://elgoog.im/t-rex/" target="_blank" class="play-btn">PLAY</a>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="thumb">🧱</div>
-                <div class="info">
-                    <h3>Atari Breakout</h3>
-                    <p>Brick Smasher</p>
-                    <a href="https://elgoog.im/breakout/" target="_blank" class="play-btn">PLAY</a>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="thumb">🐥</div>
-                <div class="info">
-                    <h3>Flappy Bird</h3>
-                    <p>Skill/Reflex</p>
-                    <a href="https://flappybird.io/" target="_blank" class="play-btn">PLAY</a>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="thumb">🛸</div>
-                <div class="info">
-                    <h3>Space Invaders</h3>
-                    <p>Space Shooter</p>
-                    <a href="https://freeinvaders.org/" target="_blank" class="play-btn">PLAY</a>
-                </div>
-            </div>
-
+        <div class="control-box">
+          <label for="categoryFilter">Filter by category</label>
+          <select id="categoryFilter" onchange="filterGames()">
+            <option value="all">All Categories</option>
+            <option value="Arcade">Arcade</option>
+            <option value="Puzzle">Puzzle</option>
+            <option value="Strategy">Strategy</option>
+            <option value="Fun">Fun</option>
+          </select>
         </div>
+
+        <div class="control-box">
+          <label for="sortFilter">Sort games</label>
+          <select id="sortFilter" onchange="sortGames()">
+            <option value="default">Default Order</option>
+            <option value="name">Name (A-Z)</option>
+            <option value="rating">Rating (High-Low)</option>
+          </select>
+        </div>
+      </section>
+
+      <section id="games">
+        <div class="section-title">
+          <h2>Available Games</h2>
+          <p style="color:#cbd5e1;">Search, filter, and explore the collection</p>
+        </div>
+
+        <div class="games-grid" id="gamesGrid">
+          <div class="game-card" data-name="Classic Snake" data-category="Arcade" data-rating="4.6">
+            <div class="game-top">🐍</div>
+            <div class="game-body">
+              <div class="badge-row"><span class="badge category">Arcade</span><span class="badge rating">★ 4.6</span></div>
+              <h3>Classic Snake</h3>
+              <p>Guide the snake, collect food, and try to beat your highest score without crashing.</p>
+              <div class="card-actions">
+                <a href="snake.html" target="_blank" class="play-btn">Play</a>
+                <button class="info-btn" onclick="showGameInfo('Classic Snake', 'A reflex-based arcade game where the snake keeps growing as you collect food.', '🐍', 'Arcade', '4.6')">Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-card" data-name="Pac-Man" data-category="Arcade" data-rating="4.8">
+            <div class="game-top">👻</div>
+            <div class="game-body">
+              <div class="badge-row"><span class="badge category">Arcade</span><span class="badge rating">★ 4.8</span></div>
+              <h3>Pac-Man</h3>
+              <p>Navigate, collect dots, and avoid the ghost in this simple retro-style mini game.</p>
+              <div class="card-actions">
+                <a href="pac_man.html" target="_blank" class="play-btn">Play</a>
+                <button class="info-btn" onclick="showGameInfo('Pac-Man', 'A classic arcade-inspired game where you collect dots while escaping the ghost.', '👻', 'Arcade', '4.8')">Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-card" data-name="Minesweeper" data-category="Strategy" data-rating="4.4">
+            <div class="game-top">💣</div>
+            <div class="game-body">
+              <div class="badge-row"><span class="badge category">Strategy</span><span class="badge rating">★ 4.4</span></div>
+              <h3>Minesweeper</h3>
+              <p>Use hints and logic to reveal all safe cells while avoiding hidden mines.</p>
+              <div class="card-actions">
+                <a href="https://www.google.com/search?q=play+minesweeper" target="_blank" class="play-btn">Play</a>
+                <button class="info-btn" onclick="showGameInfo('Minesweeper', 'A logic-based game that improves careful thinking and decision making.', '💣', 'Strategy', '4.4')">Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-card" data-name="Tic Tac Toe" data-category="Fun" data-rating="4.2">
+            <div class="game-top">❌⭕</div>
+            <div class="game-body">
+              <div class="badge-row"><span class="badge category">Fun</span><span class="badge rating">★ 4.2</span></div>
+              <h3>Tic Tac Toe</h3>
+              <p>A simple 2-player game where players try to form a row, column, or diagonal first.</p>
+              <div class="card-actions">
+                <a href="tic_tac_toe.html" target="_blank" class="play-btn">Play</a>
+                <button class="info-btn" onclick="showGameInfo('Tic Tac Toe', 'A quick two-player strategy game that is easy to play and explain.', '❌⭕', 'Fun', '4.2')">Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-card" data-name="Rock Paper Scissors" data-category="Fun" data-rating="4.1">
+            <div class="game-top">🪨📄✂️</div>
+            <div class="game-body">
+              <div class="badge-row"><span class="badge category">Fun</span><span class="badge rating">★ 4.1</span></div>
+              <h3>Rock Paper Scissors</h3>
+              <p>Challenge the computer in this classic hand game based on fast decisions.</p>
+              <div class="card-actions">
+                <a href="rock_paper.html" target="_blank" class="play-btn">Play</a>
+                <button class="info-btn" onclick="showGameInfo('Rock Paper Scissors', 'A simple hand game against the computer with score tracking.', '🪨📄✂️', 'Fun', '4.1')">Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-card" data-name="2048" data-category="Puzzle" data-rating="4.7">
+            <div class="game-top">🔢</div>
+            <div class="game-body">
+              <div class="badge-row"><span class="badge category">Puzzle</span><span class="badge rating">★ 4.7</span></div>
+              <h3>2048</h3>
+              <p>Merge matching number tiles and plan your moves carefully to reach 2048.</p>
+              <div class="card-actions">
+                <a href="2048.html" target="_blank" class="play-btn">Play</a>
+                <button class="info-btn" onclick="showGameInfo('2048', 'A number puzzle game focused on merging tiles and planning moves.', '🔢', 'Puzzle', '4.7')">Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-card" data-name="Guess the Number" data-category="Puzzle" data-rating="4.0">
+            <div class="game-top">🎯</div>
+            <div class="game-body">
+              <div class="badge-row"><span class="badge category">Puzzle</span><span class="badge rating">★ 4.0</span></div>
+              <h3>Guess the Number</h3>
+              <p>Use clues and guesses to identify the correct hidden number in minimum tries.</p>
+              <div class="card-actions">
+                <a href="guess_the_number.html" target="_blank" class="play-btn">Play</a>
+                <button class="info-btn" onclick="showGameInfo('Guess the Number', 'A number challenge with feedback messages and attempt tracking.', '🎯', 'Puzzle', '4.0')">Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-card" data-name="Guess the Spy" data-category="Strategy" data-rating="3.9">
+            <div class="game-top">🕵️</div>
+            <div class="game-body">
+              <div class="badge-row"><span class="badge category">Strategy</span><span class="badge rating">★ 3.9</span></div>
+              <h3>Guess the Spy</h3>
+              <p>Observe hints carefully and identify the hidden spy using logic and deduction skills.</p>
+              <div class="card-actions">
+                <a href="guess_the_spy.html" target="_blank" class="play-btn">Play</a>
+                <button class="info-btn" onclick="showGameInfo('Guess the Spy', 'A multiplayer deduction game where one player is secretly the spy.', '🕵️', 'Strategy', '3.9')">Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-card" data-name="Flappy Bird" data-category="Arcade" data-rating="4.5">
+            <div class="game-top">🐥</div>
+            <div class="game-body">
+              <div class="badge-row"><span class="badge category">Arcade</span><span class="badge rating">★ 4.5</span></div>
+              <h3>Flappy Bird</h3>
+              <p>Tap carefully, control the bird, and pass through pipes without hitting obstacles.</p>
+              <div class="card-actions">
+                <a href="https://flappybird.io/" target="_blank" class="play-btn">Play</a>
+                <button class="info-btn" onclick="showGameInfo('Flappy Bird', 'A fast reflex-based game where timing and focus matter the most.', '🐥', 'Arcade', '4.5')">Info</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-card" data-name="Memory Game" data-category="Puzzle" data-rating="4.3">
+            <div class="game-top">🧠</div>
+            <div class="game-body">
+              <div class="badge-row"><span class="badge category">Puzzle</span><span class="badge rating">★ 4.3</span></div>
+              <h3>Memory Game</h3>
+              <p>Match pairs of cards and train your memory with this fun concentration activity.</p>
+              <div class="card-actions">
+                <a href="memory.html" target="_blank" class="play-btn">Play</a>
+                <button class="info-btn" onclick="showGameInfo('Memory Game', 'A card matching game that improves attention, memory, and focus.', '🧠', 'Puzzle', '4.3')">Info</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer">
+        © 2026 GameHub Pro | Designed as an improved student mini-project with HTML, CSS, JavaScript, and settings support.
+      </div>
     </main>
+  </div>
 
+  <div id="toast" class="hidden"></div>
+
+  <div id="gameModal" class="modal-overlay hidden" onclick="closeGameModal(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modalTitle">Game Title</h2>
+        <button class="close-btn" onclick="closeModalButton()">×</button>
+      </div>
+      <div class="modal-content">
+        <div class="modal-icon" id="modalIcon">🎮</div>
+        <p id="modalDescription">Game description will appear here.</p>
+        <div class="modal-tags">
+          <span class="modal-tag" id="modalCategory">Category</span>
+          <span class="modal-tag" id="modalRating">Rating</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function filterGames() {
+      const searchValue = document.getElementById('searchInput').value.toLowerCase();
+      const categoryValue = document.getElementById('categoryFilter').value;
+      const cards = document.querySelectorAll('.game-card');
+      let visible = 0;
+
+      cards.forEach(card => {
+        const name = card.getAttribute('data-name').toLowerCase();
+        const category = card.getAttribute('data-category');
+        const matchesSearch = name.includes(searchValue);
+        const matchesCategory = categoryValue === 'all' || category === categoryValue;
+
+        if (matchesSearch && matchesCategory) {
+          card.style.display = 'block';
+          visible++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      document.getElementById('visibleCount').textContent = visible;
+    }
+
+    function sortGames() {
+      const grid = document.getElementById('gamesGrid');
+      const cards = Array.from(grid.querySelectorAll('.game-card'));
+      const sortValue = document.getElementById('sortFilter').value;
+
+      if (sortValue === 'name') {
+        cards.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
+      } else if (sortValue === 'rating') {
+        cards.sort((a, b) => parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating));
+      }
+
+      cards.forEach(card => grid.appendChild(card));
+      filterGames();
+    }
+
+    function showGameInfo(title, description, icon, category, rating) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalDescription').textContent = description;
+      document.getElementById('modalIcon').textContent = icon;
+      document.getElementById('modalCategory').textContent = 'Category: ' + category;
+      document.getElementById('modalRating').textContent = 'Rating: ' + rating;
+      document.getElementById('gameModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeGameModal(event) {
+      if (event.target.id === 'gameModal') {
+        document.getElementById('gameModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    function closeModalButton() {
+      document.getElementById('gameModal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        document.getElementById('gameModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    function showFeaturedGame() {
+      const games = ['Classic Snake', 'Pac-Man', 'Minesweeper', 'Tic Tac Toe', 'Rock Paper Scissors', '2048', 'Guess the Number', 'Guess the Spy', 'Flappy Bird', 'Memory Game'];
+      const randomIndex = Math.floor(Math.random() * games.length);
+      const toast = document.getElementById('toast');
+      toast.textContent = 'Suggested Game: ' + games[randomIndex];
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2500);
+    }
+
+    function applySavedSettings() {
+      const saved = JSON.parse(localStorage.getItem('gameSettings'));
+      if (!saved) return;
+
+      const playerName = saved.name && saved.name.trim() ? saved.name.trim() : 'Guest';
+      document.getElementById('playerGreeting').textContent = 'Player: ' + playerName;
+      document.getElementById('heroTitle').textContent = 'Welcome ' + playerName + ' to the 10-in-1 Arcade Portal';
+      document.getElementById('themeStatus').textContent = 'Theme: ' + (saved.theme === 'light' ? 'Light' : 'Dark');
+
+      if (saved.theme === 'light') {
+        document.body.classList.add('light-mode');
+      } else {
+        document.body.classList.remove('light-mode');
+      }
+    }
+
+    // Navigation active highlight
+    const links = document.querySelectorAll(".nav-link");
+
+    links.forEach(link => {
+      link.addEventListener("click", function() {
+        links.forEach(l => l.classList.remove("active"));
+        this.classList.add("active");
+      });
+    });
+
+    applySavedSettings();
+  </script>
 </body>
 </html>

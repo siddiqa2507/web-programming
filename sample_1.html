@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GameHub</title>
+<style>
+  body {
+    margin: 0;
+    background: #0b0f14;
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #000;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+  }
+
+  .logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #00d4ff;
+    margin-bottom: 30px;
+  }
+
+  .menu {
+    list-style: none;
+    padding: 0;
+  }
+
+  .menu li {
+    padding: 12px 15px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+  }
+
+  .menu li:hover {
+    background: #111;
+    transform: translateX(5px);
+  }
+
+  .menu li.active {
+    background: #00d4ff;
+    color: black;
+    font-weight: bold;
+  }
+
+  .icon {
+    margin-right: 12px;
+    font-size: 18px;
+  }
+
+  /* Main content */
+  .content {
+    flex: 1;
+    padding: 30px;
+  }
+
+  .card {
+    background: #111;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  /* Settings panel */
+  .settings-panel {
+    position: fixed;
+    right: -300px;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background: #111;
+    padding: 20px;
+    transition: 0.4s;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+  }
+
+  .settings-panel.open {
+    right: 0;
+  }
+
+  button {
+    padding: 10px;
+    background: #00d4ff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="logo">GameHub</div>
+  <ul class="menu">
+    <li class="active" onclick="selectMenu(this)">
+      <span class="icon">🏠</span> Home
+    </li>
+    <li onclick="selectMenu(this)">
+      <span class="icon">🚀</span> Action
+    </li>
+    <li onclick="selectMenu(this)">
+      <span class="icon">🧩</span> Puzzle
+    </li>
+    <li onclick="selectMenu(this)">
+      <span class="icon">🃏</span> Cards
+    </li>
+    <li onclick="toggleSettings()">
+      <span class="icon">⚙️</span> Settings
+    </li>
+  </ul>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+  <div class="card">
+    <h2>Welcome to GameHub 🎮</h2>
+    <p>Select a category from the sidebar to explore games.</p>
+  </div>
+
+  <div class="card" id="categoryContent">
+    <h3>Home</h3>
+    <p>Featured games will appear here.</p>
+  </div>
+</div>
+
+<!-- Settings Panel -->
+<div class="settings-panel" id="settingsPanel">
+  <h2>Settings</h2>
+  
+  <label>
+    <input type="checkbox" onchange="toggleDarkMode(this)">
+    Dark Mode
+  </label><br>
+
+  <button onclick="alert('Settings Saved!')">Save</button>
+</div>
+
+<script>
+  function selectMenu(element) {
+    let items = document.querySelectorAll(".menu li");
+    items.forEach(item => item.classList.remove("active"));
+    element.classList.add("active");
+
+    let category = element.innerText.trim();
+    document.getElementById("categoryContent").innerHTML = `
+      <h3>${category}</h3>
+      <p>Showing ${category} games...</p>
+    `;
+  }
+
+  function toggleSettings() {
+    document.getElementById("settingsPanel").classList.toggle("open");
+  }
+
+  function toggleDarkMode(checkbox) {
+    if (checkbox.checked) {
+      document.body.style.background = "#000";
+    } else {
+      document.body.style.background = "#0b0f14";
+    }
+  }
+</script>
+
+</body>
+</html>
